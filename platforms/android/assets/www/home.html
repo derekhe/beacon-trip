@@ -1,20 +1,29 @@
 <ion-view title="'Welcome'">
     <ion-content has-header="true">
-        <ion-toggle ng-model="status.monitoring" ng-change="changeMonitor()">
+        <ion-toggle ng-model="settings.monitoring" ng-change="changeMonitor()">
             Monitor
         </ion-toggle>
 
-        <ion-toggle ng-model="status.ranging" ng-change="changeRanging()">
+        <ion-toggle ng-model="settings.ranging" ng-change="changeRanging()">
             Ranging
         </ion-toggle>
 
-        <pre>{{status.monitoring}}</pre>
+        <ion-toggle ng-model="settings.debugMode" ng-change="debugMode()">
+            DebugMode
+        </ion-toggle>
 
-        <pre>{{status.ranging}}</pre>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <p ng-show="!regionExited">You are in the region</p>
 
-        <pre>{{monitorResult | json}}</pre>
+                <p ng-show="regionExited">You are out of the region</p>
+            </div>
+        </div>
 
-        <pre>{{rangeResult | json}}</pre>
-
+        <div class="row" class="item" ng-class="{assertive: isNearest(beacon)}" ng-repeat="beacon in rangeResult.ibeacons">
+            <div class="col">{{beacon.major}}-{{beacon.minor}}</div>
+            <div class="col">{{beacon.proximity}}</div>
+            <div class="col">{{beacon.accuracy | number:2}}</div>
+        </div>
     </ion-content>
 </ion-view>

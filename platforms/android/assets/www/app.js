@@ -6,6 +6,10 @@ beaconTrip.config(function ($stateProvider, $urlRouterProvider) {
             url: "/home",
             templateUrl: "home.html"
         })
+        .state('beacon-1-1', {
+            url: "/beacon/1/1",
+            templateUrl: "beacons/beacon-1-1.html"
+        })
         .state('beacon-1-2', {
             url: "/beacon/1/2",
             templateUrl: "beacons/beacon-1-2.html"
