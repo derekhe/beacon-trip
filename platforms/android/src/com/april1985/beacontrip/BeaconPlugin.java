@@ -28,21 +28,23 @@ public class BeaconPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals(START_SERVICE)) {
-            webView.postMessage(START_SERVICE, null);
-            callbackContext.sendPluginResult(new PluginResult(OK));
-            return true;
-        } else if (action.equals("startMonitoring")) {
-            return startMonitoring(callbackContext, getRegion(args));
-        } else if (action.equals("stopMonitoring")) {
-            return stopMonitoring(callbackContext, getRegion(args));
-        } else if (action.equals("startRanging")) {
-            return startRanging(callbackContext, getRegion(args));
-        } else if (action.equals("stopRanging")) {
-            return stopRanging(callbackContext, getRegion(args));
-        }
+        synchronized (this) {
+            if (action.equals(START_SERVICE)) {
+                webView.postMessage(START_SERVICE, null);
+                callbackContext.sendPluginResult(new PluginResult(OK));
+                return true;
+            } else if (action.equals("startMonitoring")) {
+                return startMonitoring(callbackContext, getRegion(args));
+            } else if (action.equals("stopMonitoring")) {
+                return stopMonitoring(callbackContext, getRegion(args));
+            } else if (action.equals("startRanging")) {
+                return startRanging(callbackContext, getRegion(args));
+            } else if (action.equals("stopRanging")) {
+                return stopRanging(callbackContext, getRegion(args));
+            }
 
-        return true;
+            return true;
+        }
     }
 
     private boolean stopRanging(CallbackContext callbackContext, Region region) throws JSONException {
@@ -188,7 +190,8 @@ public class BeaconPlugin extends CordovaPlugin {
         if (ON_BEACON_SERVICE_CONNECT.equals(id)) {
             Log.d(TAG, "Beacon connected");
 
-            this.iBeaconManager = (IBeaconManager)data;
+            this.iBeaconManager = (IBeaconManager) data;
+            iBeaconManager.setForegroundScanPeriod(500);
             return iBeaconManager;
         }
 
