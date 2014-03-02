@@ -1,6 +1,4 @@
 beaconTrip.controller('home_controller', function ($scope, beaconService) {
-    $scope.settings = { monitoring: false, ranging: false};
-    $scope.regionExited = true;
 
     $scope.changeMonitor = function () {
         if ($scope.settings.monitoring) {
@@ -26,6 +24,9 @@ beaconTrip.controller('home_controller', function ($scope, beaconService) {
     $scope.$on("serviceStarted", function () {
         $scope.$apply(function () {
             $scope.serviceStarted = true;
+            $scope.settings = {ranging: true, monitoring: true, debug: true};
+            $scope.regionExited = true;
+
         });
     });
 
@@ -56,7 +57,7 @@ beaconTrip.controller('home_controller', function ($scope, beaconService) {
                     return beacon.accuracy;
                 });
 
-                if ($scope.settings.debugMode) {
+                if ($scope.settings.debug) {
                     return;
                 }
 
@@ -72,6 +73,10 @@ beaconTrip.controller('home_controller', function ($scope, beaconService) {
     );
 
     document.addEventListener("deviceready", function () {
-        beaconService.startService()
+        beaconService.startService().then(function () {
+            return beaconService.startMonitoring();
+        }).then(function () {
+            return beaconService.startRanging();
+        });
     }, false);
 });
