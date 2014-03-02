@@ -12,18 +12,26 @@
             DebugMode
         </ion-toggle>
 
-        <div class="card">
-            <div class="item item-text-wrap">
-                <p ng-show="!regionExited">You are in the region</p>
-
-                <p ng-show="regionExited">You are out of the region</p>
+        <div ng-show="serviceStarted">
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <p>Service started</p>
+                    <p ng-hide="regionExited">You are in the region</p>
+                    <p ng-show="regionExited">You are out of the region</p>
+                </div>
             </div>
-        </div>
 
-        <div class="row" class="item" ng-class="{assertive: isNearest(beacon)}" ng-repeat="beacon in rangeResult.ibeacons">
-            <div class="col">{{beacon.major}}-{{beacon.minor}}</div>
-            <div class="col">{{beacon.proximity}}</div>
-            <div class="col">{{beacon.accuracy | number:2}}</div>
+            <div class="row">
+                <div class="col">Major-Minor</div>
+                <div class="col">Proximity</div>
+                <div class="col">Accuracy</div>
+            </div>
+            <div class="row" class="item" ng-class="{assertive: isNearest(beacon)}"
+                 ng-repeat="beacon in rangeResult.ibeacons">
+                <div class="col">{{beacon.major}}-{{beacon.minor}}</div>
+                <div class="col">{{beacon.proximity}}</div>
+                <div class="col">{{beacon.accuracy | number:2}}</div>
+            </div>
         </div>
     </ion-content>
 </ion-view>
